@@ -20,7 +20,6 @@ namespace WkHtmlToXSharp
     public sealed class WkHtmlToImageConverter : IHtmlToImageConverter
 	{
 		#region private fields
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private ImageGlobalSettings _globalSettings = new ImageGlobalSettings();
 		private StringBuilder _errorString = null;
@@ -42,19 +41,8 @@ namespace WkHtmlToXSharp
 		#endregion
 
 		#region .ctors
-		public WkHtmlToImageConverter()
-		{
-			bool useX11 = false;
-
-			try
-			{
-				useX11 = SysConvert.ToBoolean(ConfigurationManager.AppSettings["WkHtmlToXSharp.UseX11"]);
-			}
-			catch (Exception ex)
-			{
-				_Log.Error("Unable to parse 'WkHtmlToXSharp.UseX11' app. setting.", ex);
-			}
-			
+        public WkHtmlToImageConverter(bool useX11 = false)
+		{			
 			// Try to deploy native libraries bundles.
 			WkHtmlToXLibrariesManager.InitializeNativeLibrary();
 
@@ -63,7 +51,7 @@ namespace WkHtmlToXSharp
 			if (NativeCalls.wkhtmltoimage_init(useX11 ? 1 : 0) == 0)
 				throw new InvalidOperationException(string.Format("wkhtmltoimage_init failed! (version: {0}, useX11 = {1})", version, useX11));
 
-			_Log.DebugFormat("Initialized new converter instance (Version: {0}, UseX11 = {1})", version, useX11);
+			Logger.DebugFormat("Initialized new converter instance (Version: {0}, UseX11 = {1})", version, useX11);
 		}
 		#endregion
 
@@ -143,7 +131,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("Begin event handler failed.", ex);
+				Logger.Error("Begin event handler failed.", ex);
 			}
 		}
         private void OnError(ImageConverterHandle ptr, string error)
@@ -157,7 +145,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("Error event handler failed.", ex);
+				Logger.Error("Error event handler failed.", ex);
 			}
 		}
         private void OnWarning(ImageConverterHandle ptr, string warn)
@@ -169,7 +157,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("Warning event handler failed.", ex);
+				Logger.Error("Warning event handler failed.", ex);
 			}
 		}
 		private void OnPhaseChanged(ImageConverterHandle converter)
@@ -183,7 +171,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("PhaseChanged event handler failed.", ex);
+				Logger.Error("PhaseChanged event handler failed.", ex);
 			}
 		}
         private void OnProgressChanged(ImageConverterHandle converter, int progress)
@@ -197,7 +185,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("ProgressChanged event handler failed.", ex);
+				Logger.Error("ProgressChanged event handler failed.", ex);
 			}
 		}
         private void OnFinished(ImageConverterHandle converter, bool success)
@@ -208,7 +196,7 @@ namespace WkHtmlToXSharp
 			}
 			catch (Exception ex)
 			{
-				_Log.Error("Finished event handler failed.", ex);
+				Logger.Error("Finished event handler failed.", ex);
 			}
 		}
 		#endregion
@@ -255,7 +243,7 @@ namespace WkHtmlToXSharp
 				if (!string.IsNullOrEmpty(GlobalSettings.Out))
 					return null;
 
-				_Log.Debug("CONVERSION DONE.. getting output.");
+				Logger.Debug("CONVERSION DONE.. getting output.");
 
 				// Get output from internal buffer..
 
@@ -300,7 +288,7 @@ namespace WkHtmlToXSharp
 		{
 			if (_disposed)
 			{
-				_Log.Warn("Disposed was called more than once?!");
+				Logger.Warn("Disposed was called more than once?!");
 				return;
 			}
 

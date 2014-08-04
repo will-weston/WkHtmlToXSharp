@@ -9,8 +9,6 @@ namespace WkHtmlToXSharp
 {
 	public class MultiplexingImageConverter : IHtmlToImageConverter
 	{
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		// Internal 'thread delegate proxy' which handles multiplexing 
 		// of calls  to qk/qt from a single thread.
 		private static readonly DelegateQueue _worker = new DelegateQueue("WkHtmlToImage");
@@ -56,7 +54,8 @@ namespace WkHtmlToXSharp
 		{
 			lock (_worker)
 			{
-                WkHtmlToXLibrariesManager.InitializeNativeLibrary();
+                WkHtmlToXLibrariesManager.InitializeNativeLibrary();
+
 				// XXX: We need to keep a converter instance alive during the whole application
 				//		lifetime due to some underlying's library bug by which re-initializing
 				//		the API after having deinitiaized it, causes all newlly rendered pdf
@@ -65,16 +64,16 @@ namespace WkHtmlToXSharp
 				// See: http://code.google.com/p/wkhtmltopdf/issues/detail?id=511
 				if (_initiWorkAround == null)
 				{
-					_Log.InfoFormat("Initializing converter infrastructure..");
+					Logger.InfoFormat("Initializing converter infrastructure..");
 					_worker.Invoke((Action)(() => _initiWorkAround = new WkHtmlToImageConverter()));
-					_Log.InfoFormat("Initialized converter infrastructure.. (workaround: {0})", _initiWorkAround != null);
+					Logger.InfoFormat("Initialized converter infrastructure.. (workaround: {0})", _initiWorkAround != null);
 
 					AppDomain.CurrentDomain.ProcessExit += (o, e) =>
 						_worker.Invoke((Action)(() => {
-							_Log.InfoFormat("Disposing converter infraestructure..");
+							Logger.InfoFormat("Disposing converter infraestructure..");
 							_initiWorkAround.Dispose();
 							_initiWorkAround = null;
-							_Log.InfoFormat("Disposed converter infraestructure..");
+							Logger.InfoFormat("Disposed converter infraestructure..");
 						}));
 				}
 			}

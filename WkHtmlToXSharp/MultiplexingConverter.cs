@@ -35,8 +35,6 @@ namespace WkHtmlToXSharp
 {
 	public class MultiplexingConverter : IHtmlToPdfConverter
 	{
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		// Internal 'thread delegate proxy' which handles multiplexing 
 		// of calls  to qk/qt from a single thread.
 		private static readonly DelegateQueue _worker = new DelegateQueue("WkHtmlToPdf");
@@ -93,16 +91,16 @@ namespace WkHtmlToXSharp
 				// See: http://code.google.com/p/wkhtmltopdf/issues/detail?id=511
 				if (_initiWorkAround == null)
 				{
-					_Log.InfoFormat("Initializing converter infrastructure..");
+					Logger.InfoFormat("Initializing converter infrastructure..");
 					_worker.Invoke((Action)(() => _initiWorkAround = new WkHtmlToPdfConverter()));
-					_Log.InfoFormat("Initialized converter infrastructure.. (workaround: {0})", _initiWorkAround != null);
+					Logger.InfoFormat("Initialized converter infrastructure.. (workaround: {0})", _initiWorkAround != null);
 
 					AppDomain.CurrentDomain.ProcessExit += (o, e) =>
 						_worker.Invoke((Action)(() => {
-							_Log.InfoFormat("Disposing converter infraestructure..");
+							Logger.InfoFormat("Disposing converter infraestructure..");
 							_initiWorkAround.Dispose();
 							_initiWorkAround = null;
-							_Log.InfoFormat("Disposed converter infraestructure..");
+							Logger.InfoFormat("Disposed converter infraestructure..");
 						}));
 				}
 			}

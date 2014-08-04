@@ -6,7 +6,7 @@ namespace WkHtmlToXSharp
 {
 	internal static class NativeCalls
 	{
-        private const string DLL_NAME = "wkhtmltox0";
+        private const string DLL_NAME = "wkhtmltox";
 
         static NativeCalls()
         {

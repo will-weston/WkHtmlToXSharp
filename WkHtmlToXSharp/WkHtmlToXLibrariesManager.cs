@@ -114,6 +114,7 @@ namespace WkHtmlToXSharp
 
 		internal static void InitializeNativeLibrary()
 		{
+            return;
 			lock (_lock)
 			{
 				if (!_done)

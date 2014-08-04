@@ -38,12 +38,12 @@ namespace WkHtmlToXSharp
 
 	public class PdfGlobalSettings
 	{
-		private PdfMarginSettings _margins = new PdfMarginSettings();
+		private MarginSettings _margins = new MarginSettings();
 
 		public int Dpi { get; set; }
 		public int ImageDpi { get; set; }
 		public int ImageQuality { get; set; }
-		public PdfMarginSettings Margin { get { return _margins; } }
+		public MarginSettings Margin { get { return _margins; } }
 		public bool Outline { get; set; }
 
 		public string Out { get; set; }

@@ -113,6 +113,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConverterException.cs" />
+    <Compile Include="MultiplexingImageConverter.cs" />
+    <Compile Include="IHtmlToImageConverter.cs" />
+    <Compile Include="CropSettings.cs" />
+    <Compile Include="ImageGlobalSettings.cs" />
+    <Compile Include="LoadGlobalSettings.cs" />
+    <Compile Include="WkHtmlToImageConverter.cs" />
     <Compile Include="IHtmlToPdfConverter.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="DelegateQueue\AsyncResult.cs" />
@@ -127,7 +133,7 @@
     <Compile Include="Marshaler.cs" />
     <Compile Include="NativeCalls.cs" />
     <Compile Include="PdfGlobalSettings.cs" />
-    <Compile Include="PdfMarginSettings.cs" />
+    <Compile Include="MarginSettings.cs" />
     <Compile Include="PdfObjectSettings.cs" />
     <Compile Include="MultiplexingConverter.cs" />
     <Compile Include="WebSettings.cs" />
